@@ -1,10 +1,11 @@
 <script>
 	import { T, useFrame, useThrelte } from '@threlte/core';
-	import { Grid, OrbitControls } from '@threlte/extras';
+	import { OrbitControls } from '@threlte/extras';
 	import { onMount } from 'svelte';
 	import { Raycaster, Vector2, Vector3 } from 'three';
 
 	import Spaceship from './models/spaceship.svelte';
+	import Stars from './Stars.svelte';
 
 	let planeRef;
 	let sphereRef;
@@ -26,7 +27,10 @@
 			translAccelleration *= 0.95; // damping
 			translY += translAccelleration;
 
-			const dir = intersectionPoint.clone().sub(new Vector3(0, translY, 0)).normalize();
+			const dir = intersectionPoint
+				.clone()
+				.sub(new Vector3(0, translY, 0))
+				.normalize();
 			const dirCos = dir.dot(new Vector3(0, 1, 0));
 			const angle = Math.acos(dirCos) - Math.PI * 0.5;
 			angleAccelleration += (angle - angleZ) * 0.01; // stiffness
@@ -61,7 +65,7 @@
 	});
 </script>
 
-<T.PerspectiveCamera makeDefault position={[-5, 5, 15]} fov={25}>
+<T.PerspectiveCamera makeDefault position={[-5, 8, 13]} fov={25}>
 	<OrbitControls enableDamping target={[0, 0, 0]} />
 </T.PerspectiveCamera>
 
@@ -74,23 +78,16 @@
 />
 <T.AmbientLight intensity={0.2} />
 
-<Grid
-	position.y={-0.001}
-	cellColor="#ffffff"
-	sectionColor="#ffffff"
-	sectionThickness={0}
-	fadeDistance={25}
-	cellSize={2}
-/>
+<Spaceship position={[0, translY, 0]} rotation={[angleZ, 0, angleZ, 'ZYX']} />
 
-<Spaceship position={[0,translY,0]} rotation = {[angleZ,0,angleZ, 'ZYX']} />
+<Stars />
 
-<T.Mesh renderOrder={2} bind:ref={planeRef} visible={false} >
+<T.Mesh renderOrder={2} bind:ref={planeRef} visible={false}>
 	<T.PlaneGeometry args={[20, 20]} />
-	<T.MeshBasicMaterial color={[1, 0, 1]} transparent opacity={0.25}/>
+	<T.MeshBasicMaterial color={[1, 0, 1]} transparent opacity={0.25} />
 </T.Mesh>
 
-<T.Mesh position={[1, 2, 0]} bind:ref={sphereRef} visible={false} >
+<T.Mesh position={[1, 2, 0]} bind:ref={sphereRef} visible={false}>
 	<T.SphereGeometry args={[0.1, 20, 20]} />
 	<T.MeshBasicMaterial color={[1, 0, 0]} />
 </T.Mesh>
