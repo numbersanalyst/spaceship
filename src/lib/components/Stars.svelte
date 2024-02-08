@@ -3,7 +3,7 @@
 	import { useTexture, InstancedMesh, Instance } from '@threlte/extras';
 	import { Color, DoubleSide, Vector3 } from 'three';
 
-	const map = useTexture('/textures/star.png');
+	const map = useTexture('./textures/star.png');
 
 	const STARS_COUNT = 350;
 	const COLORS = ['#fcaa67', '#c76d59', '#ffffc7', '#8cc5c6', '#a5898c'];
