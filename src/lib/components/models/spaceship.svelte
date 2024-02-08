@@ -8,13 +8,14 @@ Title: Rusty Spaceship - Orange
 -->
 
 <script>
-	import { Group } from 'three';
+	import { AddEquation, CustomBlending, CylinderGeometry, Group, OneFactor } from 'three';
 	import { T, forwardEventHandlers } from '@threlte/core';
-	import { useGltf } from '@threlte/extras';
+	import { useGltf, useTexture } from '@threlte/extras';
 
 	export const ref = new Group();
 
 	const gltf = useGltf('/models/spaceship.glb');
+	const map = useTexture('/textures/energy-beam-opacity.png');
 
 	gltf.then((model) => {
 		function fixAlpha(material) {
@@ -128,6 +129,12 @@ Title: Rusty Spaceship - Orange
 				position={[739.37, 145.69, 315.6]}
 				rotation={[0.17, 0, 0]}
 			/>
+			{#await map then mapValue}
+				<T.Mesh position={[740, -60, -1350]} rotation.x={Math.PI * 0.5}>
+					<T.CylinderGeometry args={[70, 25, 1600, 15]} />
+					<T.MeshBasicMaterial alphaMap={mapValue} color={[1.0, 0.4, 0.02]} transparent blending={CustomBlending} blendDst={OneFactor} blendEquation={AddEquation} />
+				</T.Mesh>
+			{/await}
 		</T.Group>
 	{:catch error}
 		<slot name="error" {error} />
