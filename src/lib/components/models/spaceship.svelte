@@ -8,7 +8,7 @@ Title: Rusty Spaceship - Orange
 -->
 
 <script>
-	import { AddEquation, CustomBlending, CylinderGeometry, Group, OneFactor } from 'three';
+	import { AddEquation, CustomBlending, Group, OneFactor } from 'three';
 	import { T, forwardEventHandlers } from '@threlte/core';
 	import { useGltf, useTexture } from '@threlte/extras';
 

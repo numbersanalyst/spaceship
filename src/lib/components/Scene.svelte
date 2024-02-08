@@ -72,9 +72,9 @@
 		spaceshipRef.visible = true;
 
 		spaceshipRef.traverse((child) => {
-			if (child?.material?.envMapIntesivity) {
+			if (child?.material?.envMapIntensity) {
 				child.material.envMap = envMapRT.texture;
-				child.material.envMapIntesivity = 100;
+				child.material.envMapIntensity = 100;
 				child.material.normalScale.set(0.3, 0.3);
 			}
 		});
@@ -115,18 +115,17 @@
 </T.PerspectiveCamera>
 
 <T.DirectionalLight
-	intensity={0.8}
-	position.x={5}
-	position.y={10}
+	intensity={1.8}
+	position={[0,10,0]}
 	castShadows
 	shadow-bias={-0.0001}
 />
 <T.AmbientLight intensity={0.2} />
 
 <Spaceship
+	bind:ref={spaceshipRef}
 	position={[0, translY, 0]}
 	rotation={[angleZ, 0, angleZ, 'ZYX']}
-	bind:ref={spaceshipRef}
 />
 
 <Stars />
