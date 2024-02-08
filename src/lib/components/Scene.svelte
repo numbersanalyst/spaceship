@@ -1,8 +1,13 @@
 <script>
-	import { T, useFrame, useThrelte } from '@threlte/core';
+	import { T, useRender, useThrelte } from '@threlte/core';
 	import { OrbitControls } from '@threlte/extras';
 	import { onMount } from 'svelte';
 	import { Raycaster, Vector2, Vector3 } from 'three';
+
+	import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+	import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+	import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+	import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 
 	import Spaceship from './models/spaceship.svelte';
 	import Stars from './Stars.svelte';
@@ -12,15 +17,29 @@
 
 	let intersectionPoint;
 
-	const { scene, camera, renderer } = useThrelte();
-
 	let translY = 0;
 	let translAccelleration = 0;
 
 	let angleZ = 0;
 	let angleAccelleration = 0;
 
-	useFrame(({ scene }) => {
+	const { scene, camera, renderer } = useThrelte();
+
+	const composer = new EffectComposer(renderer);
+	composer.setSize(innerWidth, innerHeight);
+
+	const setupEffectComposer = () => {
+		const renderPass = new RenderPass(scene, camera.current);
+		composer.addPass(renderPass);
+
+		const bloomPass = new UnrealBloomPass(new Vector2(innerWidth, innerHeight), 0.275, 1, 0);
+		composer.addPass(bloomPass);
+
+		const outputPass = new OutputPass();
+		composer.addPass(outputPass);
+	}
+
+	useRender(({ scene }) => {
 		if (intersectionPoint) {
 			const targetY = intersectionPoint?.y || 0;
 			translAccelleration += (targetY - translY) * 0.003; // stiffness
@@ -37,9 +56,13 @@
 			angleAccelleration *= 0.85; // damping
 			angleZ += angleAccelleration;
 		}
+
+		composer.render();
 	});
 
 	onMount(() => {
+		setupEffectComposer();
+
 		const raycaster = new Raycaster();
 		const pointer = new Vector2();
 
