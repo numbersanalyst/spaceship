@@ -2,7 +2,7 @@
 	import { T, useRender, useThrelte } from '@threlte/core';
 	import { OrbitControls } from '@threlte/extras';
 	import { onMount } from 'svelte';
-	import { Raycaster, Vector2, Vector3 } from 'three';
+	import { Color, PMREMGenerator, Raycaster, Vector2, Vector3 } from 'three';
 
 	import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 	import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
@@ -14,6 +14,7 @@
 
 	let planeRef;
 	let sphereRef;
+	let spaceshipRef;
 
 	let intersectionPoint;
 
@@ -24,6 +25,9 @@
 	let angleAccelleration = 0;
 
 	const { scene, camera, renderer } = useThrelte();
+
+	let pmrem = new PMREMGenerator(renderer);
+	let envMapRT;
 
 	const composer = new EffectComposer(renderer);
 	composer.setSize(innerWidth, innerHeight);
@@ -37,7 +41,7 @@
 
 		const outputPass = new OutputPass();
 		composer.addPass(outputPass);
-	}
+	};
 
 	useRender(({ scene }) => {
 		if (intersectionPoint) {
@@ -56,6 +60,24 @@
 			angleAccelleration *= 0.85; // damping
 			angleZ += angleAccelleration;
 		}
+
+		if (envMapRT) {
+			envMapRT.dispose();
+		}
+
+		spaceshipRef.visible = false;
+		scene.background = null;
+		envMapRT = pmrem.fromScene(scene, 0, 0.1, 1000);
+		scene.background = new Color('#598889').multiplyScalar(0.05);
+		spaceshipRef.visible = true;
+
+		spaceshipRef.traverse((child) => {
+			if (child?.material?.envMapIntesivity) {
+				child.material.envMap = envMapRT.texture;
+				child.material.envMapIntesivity = 100;
+				child.material.normalScale.set(0.3, 0.3);
+			}
+		});
 
 		composer.render();
 	});
@@ -101,7 +123,11 @@
 />
 <T.AmbientLight intensity={0.2} />
 
-<Spaceship position={[0, translY, 0]} rotation={[angleZ, 0, angleZ, 'ZYX']} />
+<Spaceship
+	position={[0, translY, 0]}
+	rotation={[angleZ, 0, angleZ, 'ZYX']}
+	bind:ref={spaceshipRef}
+/>
 
 <Stars />
 
