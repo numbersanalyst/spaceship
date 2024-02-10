@@ -32,6 +32,11 @@
 	const composer = new EffectComposer(renderer);
 	composer.setSize(innerWidth, innerHeight);
 
+	onresize = () => {
+		console.log('window resized');
+		composer.setSize(innerWidth, innerHeight);
+	};
+
 	const setupEffectComposer = () => {
 		const renderPass = new RenderPass(scene, camera.current);
 		composer.addPass(renderPass);
