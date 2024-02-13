@@ -1,38 +1,49 @@
-# create-svelte
+# Threlte Spaceship App
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+This project is a Svelte app built with Threlte and Three.js, allowing users to interact with a 3D spaceship that reacts to mouse movements. It incorporates cool effects like stars and an interactive spaceship model.
 
-## Creating a project
+## [Demo](numbersanalyst.github.io/spaceship/)
 
-If you're seeing this, you've probably already done this step. Congrats!
+![Spaceship App Demo](screenshot.png)
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+## Features
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+- 3D spaceship model that reacts to mouse movements.
+- Cool visual effects like stars in the background.
+- Smooth user interaction with the spaceship.
 
-## Developing
+## Getting Started
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+To get a local copy up and running follow these simple steps.
 
-```bash
-npm run dev
+### Prerequisites
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+Make sure you have Node.js and npm installed on your machine.
 
-## Building
+### Installation
 
-To create a production version of your app:
+1. Clone the repo
+   ```sh
+   git clone https://github.com/your_username_/Project-Name.git
+   ```
+2. Install NPM packages
+   ```sh
+   npm install
+   ```
+3. Start the development server
+   ```sh
+   npm run dev
+   ```
 
-```bash
-npm run build
-```
+## Usage
 
-You can preview the production build with `npm run preview`.
+- Move your mouse to interact with the spaceship.
+- Enjoy the immersive experience with the 3D model and visual effects.
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+## Credits
+
+This project was inspired by the tutorial [animating a spaceship](https://threlte.xyz/docs/examples/tutorials/animating-a-spaceship) by [Domenicobrz](https://github.com/Domenicobrz) from official Threlte documentation.
+
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.
